@@ -10,18 +10,18 @@ import com.blingbling.quickadapter.BaseQuickAdapter;
 
 public abstract class ItemView<T> {
 
-    protected BaseQuickAdapter mAdapter;
+    protected BaseQuickAdapter mQuickAdapter;
     private ItemViewHolder mItemViewHolder;
     private T mData;
     private boolean mShouldBindData = false;
 
-    public void setQuickAdapter(BaseQuickAdapter adapter) {
-        mAdapter = adapter;
+    public void setQuickAdapter(BaseQuickAdapter quickAdapter) {
+        mQuickAdapter = quickAdapter;
     }
 
     public void createViewHolder(BaseViewHolder holder) {
         if (mItemViewHolder == null) {
-            mItemViewHolder = new ItemViewHolder(holder.itemView);
+            mItemViewHolder = holder;
             onCreateView(mItemViewHolder);
         }
     }

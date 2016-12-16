@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
+import android.support.v7.widget.RecyclerView;
 import android.text.util.Linkify;
 import android.util.SparseArray;
 import android.view.View;
@@ -20,23 +21,18 @@ import android.widget.TextView;
  * Created by BlingBling on 2016/12/14.
  */
 
-public class ItemViewHolder {
+public class ItemViewHolder extends RecyclerView.ViewHolder {
 
-    private View mView;
     private final SparseArray<View> views = new SparseArray<>();
 
     public ItemViewHolder(View view) {
-        mView = view;
-    }
-
-    public View getView() {
-        return mView;
+        super(view);
     }
 
     public <V extends View> V getView(int viewId) {
         View view = views.get(viewId);
         if (view == null) {
-            view = mView.findViewById(viewId);
+            view = itemView.findViewById(viewId);
             views.put(viewId, view);
         }
         return (V) view;
@@ -249,50 +245,19 @@ public class ItemViewHolder {
     }
 
     /**
-     * Sets the on click listener of the view.
+     * Sets the checked status of a checkable.
      *
-     * @param viewId   The view id.
-     * @param listener The on click listener;
+     * @param viewId  The view id.
+     * @param checked The checked status;
      */
-    public ItemViewHolder setOnClickListener(int viewId, View.OnClickListener listener) {
+    public ItemViewHolder setChecked(int viewId, boolean checked) {
         final View view = getView(viewId);
-        view.setOnClickListener(listener);
-        return this;
-    }
-
-    /**
-     * Sets the on touch listener of the view.
-     *
-     * @param viewId   The view id.
-     * @param listener The on touch listener;
-     */
-    public ItemViewHolder setOnTouchListener(int viewId, View.OnTouchListener listener) {
-        final View view = getView(viewId);
-        view.setOnTouchListener(listener);
-        return this;
-    }
-
-    /**
-     * Sets the on long click listener of the view.
-     *
-     * @param viewId   The view id.
-     * @param listener The on long click listener;
-     */
-    public ItemViewHolder setOnLongClickListener(int viewId, View.OnLongClickListener listener) {
-        final View view = getView(viewId);
-        view.setOnLongClickListener(listener);
-        return this;
-    }
-
-    /**
-     * Sets the on checked change listener of the view.
-     *
-     * @param viewId   The view id.
-     * @param listener The checked change listener of compound button.
-     */
-    public ItemViewHolder setOnCheckedChangeListener(int viewId, CompoundButton.OnCheckedChangeListener listener) {
-        final CompoundButton view = getView(viewId);
-        view.setOnCheckedChangeListener(listener);
+        // View unable cast to Checkable
+        if (view instanceof CompoundButton) {
+            ((CompoundButton) view).setChecked(checked);
+        } else if (view instanceof CheckedTextView) {
+            ((CheckedTextView) view).setChecked(checked);
+        }
         return this;
     }
 
@@ -321,20 +286,54 @@ public class ItemViewHolder {
         return this;
     }
 
+    //listener
+
     /**
-     * Sets the checked status of a checkable.
+     * Sets the on click listener of the view.
      *
-     * @param viewId  The view id.
-     * @param checked The checked status;
+     * @param viewId   The view id.
+     * @param listener The on click listener;
      */
-    public ItemViewHolder setChecked(int viewId, boolean checked) {
+    public ItemViewHolder setOnClickListener(int viewId, View.OnClickListener listener) {
         final View view = getView(viewId);
-        // View unable cast to Checkable
-        if (view instanceof CompoundButton) {
-            ((CompoundButton) view).setChecked(checked);
-        } else if (view instanceof CheckedTextView) {
-            ((CheckedTextView) view).setChecked(checked);
-        }
+        view.setOnClickListener(listener);
         return this;
     }
+
+    /**
+     * Sets the on long click listener of the view.
+     *
+     * @param viewId   The view id.
+     * @param listener The on long click listener;
+     */
+    public ItemViewHolder setOnLongClickListener(int viewId, View.OnLongClickListener listener) {
+        final View view = getView(viewId);
+        view.setOnLongClickListener(listener);
+        return this;
+    }
+
+    /**
+     * Sets the on checked change listener of the view.
+     *
+     * @param viewId   The view id.
+     * @param listener The checked change listener of compound button.
+     */
+    public ItemViewHolder setOnCheckedChangeListener(int viewId, CompoundButton.OnCheckedChangeListener listener) {
+        final CompoundButton view = getView(viewId);
+        view.setOnCheckedChangeListener(listener);
+        return this;
+    }
+
+    /**
+     * Sets the on touch listener of the view.
+     *
+     * @param viewId   The view id.
+     * @param listener The on touch listener;
+     */
+    public ItemViewHolder setOnTouchListener(int viewId, View.OnTouchListener listener) {
+        final View view = getView(viewId);
+        view.setOnTouchListener(listener);
+        return this;
+    }
+
 }

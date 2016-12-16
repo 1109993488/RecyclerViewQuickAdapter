@@ -6,9 +6,15 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.View;
 
+import com.blingbling.quickadapter.listener.OnItemClickListener;
+import com.blingbling.quickadapter.listener.OnItemLongClickListener;
+import com.blingbling.quickadapter.listener.SimpleOnItemTouchListener;
 import com.blingbling.quickadapter.manager.EmptyManager;
 import com.blingbling.quickadapter.manager.LoadMoreManager;
+import com.blingbling.quickadapter.view.BaseViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +42,29 @@ public class SimpleAdapterActivity extends AppCompatActivity
         initView();
         initAdapter();
         onRefresh();
+        adapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseViewHolder holder, View view, int position) {
+                Log.e("TAG", "adapter-onItemClick------------->"+position);
+            }
+        });
+        adapter.setOnItemLongClickListener(new OnItemLongClickListener() {
+            @Override
+            public void onItemLongClick(BaseViewHolder holder, View view, int position) {
+                Log.e("TAG", "adapter-onItemLongClick------------->"+position);
+            }
+        });
+        mRecyclerView.addOnItemTouchListener(new SimpleOnItemTouchListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseViewHolder holder, View view, int position) {
+                Log.e("TAG", "touch-onItemClick------------->"+position);
+            }
+        }, new OnItemLongClickListener() {
+            @Override
+            public void onItemLongClick(BaseViewHolder holder, View view, int position) {
+                Log.e("TAG", "touch-onItemLongClick------------->"+position);
+            }
+        }));
     }
 
     private void initView() {
@@ -62,11 +91,13 @@ public class SimpleAdapterActivity extends AppCompatActivity
         return data;
     }
 
-    @Override public void onRefresh() {
+    @Override
+    public void onRefresh() {
         adapter.emptyManager().setEmptyStatus(EmptyManager.STATUS_LOADING);
         adapter.loadMoreManager().setEnableLoadMore(false);
         new Handler().postDelayed(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 isError = true;
                 adapter.setNewData(getData(PAGE_SIZE));
                 currentCount = PAGE_SIZE;
@@ -78,10 +109,12 @@ public class SimpleAdapterActivity extends AppCompatActivity
     }
 
 
-    @Override public void onLoadMoreRequested() {
+    @Override
+    public void onLoadMoreRequested() {
         mRefresh.setEnabled(false);
         new Handler().postDelayed(new Runnable() {
-            @Override public void run() {
+            @Override
+            public void run() {
                 if (currentCount >= TOTAL_COUNT) {
                     adapter.loadMoreManager().loadMoreEnd();
                 } else {

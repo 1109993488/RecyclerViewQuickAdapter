@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.blingbling.quickadapter.listener.OnItemClickListener;
+import com.blingbling.quickadapter.listener.OnItemLongClickListener;
 import com.blingbling.quickadapter.manager.AnimationManager;
 import com.blingbling.quickadapter.manager.EmptyManager;
 import com.blingbling.quickadapter.manager.FooterManager;
@@ -249,7 +251,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<BaseViewH
 
     private BaseViewHolder createBaseViewHolder(ViewGroup parent, int layoutId) {
         View view = LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false);
-        return new BaseViewHolder(view);
+        return new BaseViewHolder(this, view);
     }
 
     @Override
@@ -395,4 +397,24 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<BaseViewH
 
     protected abstract void onBind(BaseViewHolder holder, T item, int position);
 
+    // listener
+
+    private OnItemClickListener mOnItemClickListener;
+    private OnItemLongClickListener mOnItemLongClickListener;
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.mOnItemClickListener = listener;
+    }
+
+    public void setOnItemLongClickListener(OnItemLongClickListener listener) {
+        this.mOnItemLongClickListener = listener;
+    }
+
+    public OnItemClickListener getOnItemClickListener() {
+        return mOnItemClickListener;
+    }
+
+    public OnItemLongClickListener getOnItemLongClickListener() {
+        return mOnItemLongClickListener;
+    }
 }

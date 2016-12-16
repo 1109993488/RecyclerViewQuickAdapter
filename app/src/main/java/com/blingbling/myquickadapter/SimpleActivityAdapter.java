@@ -58,7 +58,7 @@ public class SimpleActivityAdapter extends BaseQuickAdapter<String> {
 
     @Override
     protected void onCreate(BaseViewHolder holder, int viewType) {
-
+        holder.listenerOnItemClick().listenerOnItemLongClick();
     }
 
     @Override

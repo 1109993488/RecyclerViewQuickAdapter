@@ -30,14 +30,14 @@ public abstract class BaseManager {
         final ItemView itemView = getItemView(viewType);
 
         final View view = LayoutInflater.from(parent.getContext()).inflate(itemView.getLayoutId(), parent, false);
-        final BaseViewHolder holder = new BaseViewHolder(view);
+        final BaseViewHolder holder = new BaseViewHolder(mQuickAdapter, view);
 
         itemView.setQuickAdapter(mQuickAdapter);
         itemView.createViewHolder(holder);
         return holder;
     }
 
-    public void bindViewHolder(BaseViewHolder holder){
+    public void bindViewHolder(BaseViewHolder holder) {
         getItemView(holder.getItemViewType()).bindViewHolder(holder);
     }
 }

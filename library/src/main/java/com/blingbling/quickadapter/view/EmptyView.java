@@ -61,7 +61,7 @@ public abstract class EmptyView extends ItemView<Integer> implements View.OnClic
 
     @Override
     public void onClick(View v) {
-        final EmptyManager.OnEmptyRetryClickListener listener = mAdapter.emptyManager().getOnEmptyRetryClickListener();
+        final EmptyManager.OnEmptyRetryClickListener listener = mQuickAdapter.emptyManager().getOnEmptyRetryClickListener();
         if (listener != null) {
             setData(EmptyManager.STATUS_LOADING);
             listener.onEmptyRetryClick();

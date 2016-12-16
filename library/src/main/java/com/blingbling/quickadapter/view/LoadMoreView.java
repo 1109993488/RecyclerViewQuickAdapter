@@ -51,7 +51,7 @@ public abstract class LoadMoreView extends ItemView<Integer> implements View.OnC
     @Override
     public void onClick(View v) {
         setData(LoadMoreManager.STATUS_LOADING);
-        final LoadMoreManager.OnLoadMoreListener listener = mAdapter.loadMoreManager().getOnLoadMoreListener();
+        final LoadMoreManager.OnLoadMoreListener listener = mQuickAdapter.loadMoreManager().getOnLoadMoreListener();
         if (listener != null) {
             listener.onLoadMoreRequested();
         }
