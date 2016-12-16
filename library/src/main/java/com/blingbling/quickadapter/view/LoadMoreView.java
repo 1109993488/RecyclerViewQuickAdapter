@@ -32,19 +32,21 @@ public abstract class LoadMoreView extends ItemView<Integer> implements View.OnC
 
     @Override
     protected void onBindView(ItemViewHolder holder, @LoadMoreManager.LoadMoreStatus Integer data) {
-        visibility(holder, getLoadingViewId(), false);
-        visibility(holder, getLoadFailViewId(), false);
-        visibility(holder, getLoadEndViewId(), false);
-        switch (data) {
-            case LoadMoreManager.STATUS_LOADING:
-                visibility(holder, getLoadingViewId(), true);
-                break;
-            case LoadMoreManager.STATUS_FAIL:
-                visibility(holder, getLoadFailViewId(), true);
-                break;
-            case LoadMoreManager.STATUS_END:
-                visibility(holder, getLoadEndViewId(), true);
-                break;
+        if (data != LoadMoreManager.STATUS_DEFAULT) {
+            visibility(holder, getLoadingViewId(), false);
+            visibility(holder, getLoadFailViewId(), false);
+            visibility(holder, getLoadEndViewId(), false);
+            switch (data) {
+                case LoadMoreManager.STATUS_LOADING:
+                    visibility(holder, getLoadingViewId(), true);
+                    break;
+                case LoadMoreManager.STATUS_FAIL:
+                    visibility(holder, getLoadFailViewId(), true);
+                    break;
+                case LoadMoreManager.STATUS_END:
+                    visibility(holder, getLoadEndViewId(), true);
+                    break;
+            }
         }
     }
 

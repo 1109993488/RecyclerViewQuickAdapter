@@ -1,14 +1,15 @@
-package com.blingbling.myquickadapter;
+package com.blingbling.quickadapter.demo.activity;
 
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 
+import com.blingbling.quickadapter.demo.R;
+import com.blingbling.quickadapter.demo.adapter.TestAdapter;
 import com.blingbling.quickadapter.listener.OnItemClickListener;
 import com.blingbling.quickadapter.listener.OnItemLongClickListener;
 import com.blingbling.quickadapter.listener.SimpleOnItemTouchListener;
@@ -19,7 +20,7 @@ import com.blingbling.quickadapter.view.BaseViewHolder;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SimpleAdapterActivity extends AppCompatActivity
+public class TestActivity extends BaseActivity
         implements SwipeRefreshLayout.OnRefreshListener,
         LoadMoreManager.OnLoadMoreListener {
 
@@ -33,12 +34,12 @@ public class SimpleAdapterActivity extends AppCompatActivity
     private SwipeRefreshLayout mRefresh;
     private RecyclerView mRecyclerView;
 
-    private SimpleActivityAdapter adapter;
+    private TestAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_simple_adapter);
+        setContentView(R.layout.activity_test);
         initView();
         initAdapter();
         onRefresh();
@@ -76,7 +77,7 @@ public class SimpleAdapterActivity extends AppCompatActivity
     }
 
     private void initAdapter() {
-        adapter = new SimpleActivityAdapter(this);
+        adapter = new TestAdapter();
         adapter.loadMoreManager().setOnLoadMoreListener(this);
 //        adapter.loadMoreViewManager().setAutoLoadMoreSize(2);
         mRecyclerView.setAdapter(adapter);

@@ -7,7 +7,6 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
 import android.support.v7.widget.RecyclerView;
-import android.text.util.Linkify;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.CheckedTextView;
@@ -23,17 +22,17 @@ import android.widget.TextView;
 
 public class ItemViewHolder extends RecyclerView.ViewHolder {
 
-    private final SparseArray<View> views = new SparseArray<>();
+    private final SparseArray<View> mViews = new SparseArray<>();
 
     public ItemViewHolder(View view) {
         super(view);
     }
 
     public <V extends View> V getView(int viewId) {
-        View view = views.get(viewId);
+        View view = mViews.get(viewId);
         if (view == null) {
             view = itemView.findViewById(viewId);
-            views.put(viewId, view);
+            mViews.put(viewId, view);
         }
         return (V) view;
     }
@@ -65,17 +64,6 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     public ItemViewHolder setTextColor(int viewId, int textColor) {
         final TextView view = getView(viewId);
         view.setTextColor(textColor);
-        return this;
-    }
-
-    /**
-     * Add links into a TextView.
-     *
-     * @param viewId The id of the TextView to linkify.
-     */
-    public ItemViewHolder linkify(int viewId) {
-        final TextView view = getView(viewId);
-        Linkify.addLinks(view, Linkify.ALL);
         return this;
     }
 

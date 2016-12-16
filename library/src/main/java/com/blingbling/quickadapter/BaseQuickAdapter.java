@@ -1,6 +1,5 @@
 package com.blingbling.quickadapter;
 
-import android.content.Context;
 import android.support.annotation.IntDef;
 import android.support.annotation.LayoutRes;
 import android.support.v7.widget.RecyclerView;
@@ -42,7 +41,6 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<BaseViewH
     public @interface ViewType {
     }
 
-    private Context mContext;
     private List<T> mDatas;
 
     private SparseArray<Integer> mLayoutIds = new SparseArray<>(1);
@@ -55,13 +53,8 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<BaseViewH
     private SpanSizeManager mSpanSizeManager;
 
 
-    public BaseQuickAdapter(Context context) {
-        mContext = context;
+    public BaseQuickAdapter() {
         mSpanSizeManager = new SpanSizeManager(this);
-    }
-
-    public Context getContext() {
-        return mContext;
     }
 
     public T getItem(int position) {

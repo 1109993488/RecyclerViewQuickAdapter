@@ -10,7 +10,7 @@ import android.view.View;
 
 public class AlphaAnimation implements BaseAnimation {
 
-    private static final float DEFAULT_ALPHA_FROM = 0.5f;
+    private static final float DEFAULT_ALPHA_FROM = 0f;
     private final float mFrom;
 
     public AlphaAnimation() {

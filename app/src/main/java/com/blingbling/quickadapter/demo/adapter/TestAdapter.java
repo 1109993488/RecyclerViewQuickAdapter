@@ -1,22 +1,18 @@
-package com.blingbling.myquickadapter;
+package com.blingbling.quickadapter.demo.adapter;
 
-import android.content.Context;
 import android.graphics.Color;
 
 import com.blingbling.quickadapter.BaseQuickAdapter;
+import com.blingbling.quickadapter.demo.R;
 import com.blingbling.quickadapter.manager.AnimationManager;
-import com.blingbling.quickadapter.view.ItemView;
 import com.blingbling.quickadapter.view.BaseViewHolder;
+import com.blingbling.quickadapter.view.ItemView;
 import com.blingbling.quickadapter.view.ItemViewHolder;
 
-/**
- * Created by BlingBling on 2016/11/10.
- */
 
-public class SimpleActivityAdapter extends BaseQuickAdapter<String> {
+public class TestAdapter extends BaseQuickAdapter<String> {
 
-    public SimpleActivityAdapter(Context context) {
-        super(context);
+    public TestAdapter() {
         emptyManager().openEmptyView(true);
         animationManager().setFirstOnly(false).openAnimation(AnimationManager.ANIMATION_SCALE);
         addItemView(android.R.layout.simple_list_item_1);

@@ -1,6 +1,8 @@
 package com.blingbling.quickadapter.view;
 
+import android.text.util.Linkify;
 import android.view.View;
+import android.widget.TextView;
 
 import com.blingbling.quickadapter.BaseQuickAdapter;
 import com.blingbling.quickadapter.listener.OnItemClickListener;
@@ -32,6 +34,18 @@ public class BaseViewHolder extends ItemViewHolder implements View.OnClickListen
 
     public HashSet<View> getLongClickViews() {
         return mLongClickViews;
+    }
+
+    /**
+     * Add links into a TextView.
+     *
+     * @param viewId The id of the TextView to linkify.
+     */
+    public ItemViewHolder linkify(int viewId) {
+        final TextView view = getView(viewId);
+        mClickViews.add(view);
+        Linkify.addLinks(view, Linkify.ALL);
+        return this;
     }
 
     public BaseViewHolder listenerOnItemClick() {
