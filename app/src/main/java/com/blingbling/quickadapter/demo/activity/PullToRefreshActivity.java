@@ -53,7 +53,9 @@ public class PullToRefreshActivity extends BaseActivity implements SwipeRefreshL
 
     @Override
     public void onRefresh() {
-        showProgress();
+        if (mQuickAdapter.getData().size() == 0) {
+            showProgress();
+        }
         mQuickAdapter.loadMoreManager().setEnableLoadMore(false);
 
         currentPage = 1;
@@ -98,9 +100,9 @@ public class PullToRefreshActivity extends BaseActivity implements SwipeRefreshL
         public void fail() {
             requestEnd();
             if (mPage == 1) {
-                show("refresh fail");
+                showToast("refresh fail");
             } else {
-                show("load more fail");
+                showToast("load more fail");
                 mQuickAdapter.loadMoreManager().loadMoreFail();
             }
         }

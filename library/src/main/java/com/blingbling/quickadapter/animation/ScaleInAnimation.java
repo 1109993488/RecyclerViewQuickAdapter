@@ -9,16 +9,16 @@ import android.view.View;
  * Created by BlingBling on 2016/12/15.
  */
 
-public class ScaleAnimation implements BaseAnimation {
+public class ScaleInAnimation implements BaseAnimation {
 
     private static final float DEFAULT_SCALE_FROM = .5f;
     private final float mFrom;
 
-    public ScaleAnimation() {
+    public ScaleInAnimation() {
         this(DEFAULT_SCALE_FROM);
     }
 
-    public ScaleAnimation(float from) {
+    public ScaleInAnimation(float from) {
         mFrom = from;
     }
 

@@ -8,16 +8,16 @@ import android.view.View;
  * Created by BlingBling on 2016/12/15.
  */
 
-public class AlphaAnimation implements BaseAnimation {
+public class AlphaInAnimation implements BaseAnimation {
 
     private static final float DEFAULT_ALPHA_FROM = 0f;
     private final float mFrom;
 
-    public AlphaAnimation() {
+    public AlphaInAnimation() {
         this(DEFAULT_ALPHA_FROM);
     }
 
-    public AlphaAnimation(float from) {
+    public AlphaInAnimation(float from) {
         mFrom = from;
     }
 

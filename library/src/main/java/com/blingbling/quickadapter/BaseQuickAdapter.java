@@ -1,6 +1,5 @@
 package com.blingbling.quickadapter;
 
-import android.support.annotation.IntDef;
 import android.support.annotation.LayoutRes;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
@@ -16,10 +15,9 @@ import com.blingbling.quickadapter.manager.FooterManager;
 import com.blingbling.quickadapter.manager.HeaderManager;
 import com.blingbling.quickadapter.manager.LoadMoreManager;
 import com.blingbling.quickadapter.manager.SpanSizeManager;
+import com.blingbling.quickadapter.manager.status.EmptyStatus;
 import com.blingbling.quickadapter.view.BaseViewHolder;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,12 +34,7 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<BaseViewH
     public static final int VIEW_TYPE_LOAD_MORE = 3;
     public static final int VIEW_TYPE_EMPTY = 4;
 
-    @IntDef({VIEW_TYPE_NOT_FIND, VIEW_TYPE_DATA, VIEW_TYPE_HEADER, VIEW_TYPE_FOOTER, VIEW_TYPE_LOAD_MORE, VIEW_TYPE_EMPTY})
-    @Retention(RetentionPolicy.SOURCE)
-    public @interface ViewType {
-    }
-
-    private List<T> mDatas;
+    private List<T> mData;
 
     private SparseArray<Integer> mLayoutIds = new SparseArray<>(1);
 
@@ -58,64 +51,64 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<BaseViewH
     }
 
     public T getItem(int position) {
-        return mDatas.get(position);
+        return mData.get(position);
     }
 
-    public List<T> getDatas() {
-        return mDatas;
+    public List<T> getData() {
+        return mData;
     }
 
     public void setNewData(List<T> data) {
-        mDatas = data;
+        mData = data;
         if (mLoadMoreManager != null) {
             mLoadMoreManager.setLoadMoreEnd(false);
         }
         if (mEmptyManager != null) {
             if (getDataViewCount() == 0) {
-                mEmptyManager.setEmptyStatus(EmptyManager.STATUS_NO_DATA);
+                mEmptyManager.setEmptyStatus(EmptyStatus.STATUS_NO_DATA);
             } else {
-                mEmptyManager.setEmptyStatus(EmptyManager.STATUS_EMPTY);
+                mEmptyManager.setEmptyStatus(EmptyStatus.STATUS_EMPTY);
             }
         }
         notifyDataSetChanged();
     }
 
     private void checkDatas() {
-        if (mDatas == null) {
-            mDatas = new ArrayList<>();
+        if (mData == null) {
+            mData = new ArrayList<>();
         }
     }
 
     public void addData(T item) {
         checkDatas();
-        addData(mDatas.size(), item);
+        addData(mData.size(), item);
     }
 
     public void addData(int index, T item) {
         checkDatas();
-        mDatas.add(index, item);
+        mData.add(index, item);
         notifyItemInserted(getHeaderViewCount() + index);
     }
 
     public void addData(List<T> data) {
         checkDatas();
-        addData(mDatas.size(), data);
+        addData(mData.size(), data);
     }
 
     public void addData(int index, List<T> data) {
         checkDatas();
-        mDatas.addAll(index, data);
+        mData.addAll(index, data);
         notifyItemRangeInserted(getHeaderViewCount() + index, data.size());
     }
 
     public void removeData(int index) {
         checkDatas();
-        mDatas.remove(index);
+        mData.remove(index);
         notifyItemRemoved(getHeaderViewCount() + index);
     }
 
     public final int getDataViewCount() {
-        return mDatas == null ? 0 : mDatas.size();
+        return mData == null ? 0 : mData.size();
     }
 
     public final int getHeaderViewCount() {
@@ -285,7 +278,13 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<BaseViewH
         return mLayoutIds.get(viewType);
     }
 
-    @ViewType
+    /**
+     * Return the view type of the item.
+     *
+     * @param viewType The view type of the View.
+     * @return {@link #VIEW_TYPE_NOT_FIND} , {@link #VIEW_TYPE_DATA} , {@link #VIEW_TYPE_HEADER} , {@link #VIEW_TYPE_FOOTER} ,
+     * {@link #VIEW_TYPE_LOAD_MORE} , {@link #VIEW_TYPE_EMPTY}
+     */
     public final int getViewType(int viewType) {
         if (mLayoutIds.get(viewType) != null) {
             return VIEW_TYPE_DATA;

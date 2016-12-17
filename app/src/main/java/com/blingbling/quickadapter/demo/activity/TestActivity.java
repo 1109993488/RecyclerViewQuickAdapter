@@ -13,8 +13,8 @@ import com.blingbling.quickadapter.demo.adapter.TestAdapter;
 import com.blingbling.quickadapter.listener.OnItemClickListener;
 import com.blingbling.quickadapter.listener.OnItemLongClickListener;
 import com.blingbling.quickadapter.listener.SimpleOnItemTouchListener;
-import com.blingbling.quickadapter.manager.EmptyManager;
 import com.blingbling.quickadapter.manager.LoadMoreManager;
+import com.blingbling.quickadapter.manager.status.EmptyStatus;
 import com.blingbling.quickadapter.view.BaseViewHolder;
 
 import java.util.ArrayList;
@@ -94,7 +94,7 @@ public class TestActivity extends BaseActivity
 
     @Override
     public void onRefresh() {
-        adapter.emptyManager().setEmptyStatus(EmptyManager.STATUS_LOADING);
+        adapter.emptyManager().setEmptyStatus(EmptyStatus.STATUS_LOADING);
         adapter.loadMoreManager().setEnableLoadMore(false);
         new Handler().postDelayed(new Runnable() {
             @Override

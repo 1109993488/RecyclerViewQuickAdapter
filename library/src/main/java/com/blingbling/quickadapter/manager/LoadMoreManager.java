@@ -1,14 +1,10 @@
 package com.blingbling.quickadapter.manager;
 
-import android.support.annotation.IntDef;
-
 import com.blingbling.quickadapter.BaseQuickAdapter;
+import com.blingbling.quickadapter.manager.status.LoadMoreStatus;
 import com.blingbling.quickadapter.view.DefaultLoadMoreView;
 import com.blingbling.quickadapter.view.ItemView;
 import com.blingbling.quickadapter.view.LoadMoreView;
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 
 
 /**
@@ -16,16 +12,6 @@ import java.lang.annotation.RetentionPolicy;
  */
 
 public class LoadMoreManager extends BaseManager {
-
-    public static final int STATUS_DEFAULT = 1;
-    public static final int STATUS_LOADING = 2;
-    public static final int STATUS_FAIL = 3;
-    public static final int STATUS_END = 4;
-
-    @IntDef({STATUS_DEFAULT, STATUS_LOADING, STATUS_FAIL, STATUS_END})
-    @Retention(RetentionPolicy.SOURCE)
-    public @interface LoadMoreStatus {
-    }
 
     private LoadMoreView mLoadMoreView = new DefaultLoadMoreView();
 
@@ -92,7 +78,7 @@ public class LoadMoreManager extends BaseManager {
 
     public void setLoadMoreEnd(boolean loadMoreEnd) {
         this.mLoadMoreEnd = loadMoreEnd;
-        mLoadMoreView.setData(STATUS_DEFAULT);
+        mLoadMoreView.setData(LoadMoreStatus.STATUS_DEFAULT);
     }
 
     public boolean isEnableLoadMore() {
@@ -111,11 +97,11 @@ public class LoadMoreManager extends BaseManager {
     }
 
     public void loadMoreFail() {
-        mLoadMoreView.setData(STATUS_FAIL);
+        mLoadMoreView.setData(LoadMoreStatus.STATUS_FAIL);
     }
 
     public void loadMoreComplete() {
-        mLoadMoreView.setData(STATUS_DEFAULT);
+        mLoadMoreView.setData(LoadMoreStatus.STATUS_DEFAULT);
     }
 
     public void loadMoreEnd() {
@@ -126,7 +112,7 @@ public class LoadMoreManager extends BaseManager {
         final int oldCount = getItemViewCount();
         mLoadMoreEnd = true;
         mLoadMoreEndGone = gone;
-        mLoadMoreView.setData(STATUS_END);
+        mLoadMoreView.setData(LoadMoreStatus.STATUS_END);
         final int newCount = getItemViewCount();
         if (oldCount == 1 && newCount == 0) {
             mQuickAdapter.notifyItemRemoved(mQuickAdapter.getHeaderViewCount() + mQuickAdapter.getDataViewCount() + mQuickAdapter.getFooterViewCount());
@@ -146,10 +132,10 @@ public class LoadMoreManager extends BaseManager {
         if (position < mQuickAdapter.getItemCount() - mAutoLoadMoreSize) {
             return;
         }
-        if (mLoadMoreView.getData() != STATUS_DEFAULT) {
+        if (mLoadMoreView.getData() != LoadMoreStatus.STATUS_DEFAULT) {
             return;
         }
-        mLoadMoreView.setData(STATUS_LOADING);
+        mLoadMoreView.setData(LoadMoreStatus.STATUS_LOADING);
         if (mOnLoadMoreListener != null) {
             mOnLoadMoreListener.onLoadMoreRequested();
         }

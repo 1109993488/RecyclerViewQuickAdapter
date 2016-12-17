@@ -4,19 +4,21 @@ import android.support.annotation.IdRes;
 import android.view.View;
 
 import com.blingbling.quickadapter.manager.LoadMoreManager;
+import com.blingbling.quickadapter.manager.status.LoadMoreStatus;
 
 /**
  * Created by BlingBling on 2016/11/10.
  */
 
+
 public abstract class LoadMoreView extends ItemView<Integer> implements View.OnClickListener {
 
     public LoadMoreView() {
-        setData(LoadMoreManager.STATUS_DEFAULT);
+        setData(LoadMoreStatus.STATUS_DEFAULT);
     }
 
     @Override
-    public void setData(@LoadMoreManager.LoadMoreStatus Integer data) {
+    public void setData(@LoadMoreStatus.Status Integer data) {
         super.setData(data);
     }
 
@@ -31,28 +33,29 @@ public abstract class LoadMoreView extends ItemView<Integer> implements View.OnC
     }
 
     @Override
-    protected void onBindView(ItemViewHolder holder, @LoadMoreManager.LoadMoreStatus Integer data) {
-        if (data != LoadMoreManager.STATUS_DEFAULT) {
-            visibility(holder, getLoadingViewId(), false);
-            visibility(holder, getLoadFailViewId(), false);
-            visibility(holder, getLoadEndViewId(), false);
-            switch (data) {
-                case LoadMoreManager.STATUS_LOADING:
-                    visibility(holder, getLoadingViewId(), true);
-                    break;
-                case LoadMoreManager.STATUS_FAIL:
-                    visibility(holder, getLoadFailViewId(), true);
-                    break;
-                case LoadMoreManager.STATUS_END:
-                    visibility(holder, getLoadEndViewId(), true);
-                    break;
-            }
+    protected void onBindView(ItemViewHolder holder, @LoadMoreStatus.Status Integer data) {
+        switch (data) {
+            case LoadMoreStatus.STATUS_LOADING:
+                visibility(holder, getLoadingViewId(), true);
+                visibility(holder, getLoadFailViewId(), false);
+                visibility(holder, getLoadEndViewId(), false);
+                break;
+            case LoadMoreStatus.STATUS_FAIL:
+                visibility(holder, getLoadingViewId(), false);
+                visibility(holder, getLoadFailViewId(), true);
+                visibility(holder, getLoadEndViewId(), false);
+                break;
+            case LoadMoreStatus.STATUS_END:
+                visibility(holder, getLoadingViewId(), false);
+                visibility(holder, getLoadFailViewId(), false);
+                visibility(holder, getLoadEndViewId(), true);
+                break;
         }
     }
 
     @Override
     public void onClick(View v) {
-        setData(LoadMoreManager.STATUS_LOADING);
+        setData(LoadMoreStatus.STATUS_LOADING);
         final LoadMoreManager.OnLoadMoreListener listener = mQuickAdapter.loadMoreManager().getOnLoadMoreListener();
         if (listener != null) {
             listener.onLoadMoreRequested();

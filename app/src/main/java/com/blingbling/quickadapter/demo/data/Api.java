@@ -12,7 +12,6 @@ import java.util.List;
 
 public class Api {
     private static final long DELAY_MILLIS = 1500;
-    public static final int TOTAL = 35;
     public static final int PAGE_SIZE = 10;
 
     /**
@@ -24,14 +23,14 @@ public class Api {
             @Override
             public void run() {
                 final int size;
-                if (page < 4) {
+                if (page < 3) {
                     size = PAGE_SIZE;
-                } else if (page == 4) {
+                } else if (page == 3) {
                     size = 5;
                 } else {
                     size = 0;
                 }
-                List<News> list = DataServer.getData(page * PAGE_SIZE, size);
+                List<News> list = DataServer.getData((page - 1) * PAGE_SIZE, size);
                 callBack.success(list);
             }
         }, DELAY_MILLIS);

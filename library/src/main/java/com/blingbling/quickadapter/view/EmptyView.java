@@ -4,6 +4,7 @@ import android.support.annotation.IdRes;
 import android.view.View;
 
 import com.blingbling.quickadapter.manager.EmptyManager;
+import com.blingbling.quickadapter.manager.status.EmptyStatus;
 
 /**
  * Created by BlingBling on 2016/12/14.
@@ -12,11 +13,11 @@ import com.blingbling.quickadapter.manager.EmptyManager;
 public abstract class EmptyView extends ItemView<Integer> implements View.OnClickListener {
 
     public EmptyView() {
-        setData(EmptyManager.STATUS_DEFAULT);
+        setData(EmptyStatus.STATUS_DEFAULT);
     }
 
     @Override
-    public void setData(@EmptyManager.EmptyStatus Integer data) {
+    public void setData(@EmptyStatus.Status Integer data) {
         super.setData(data);
     }
 
@@ -28,26 +29,41 @@ public abstract class EmptyView extends ItemView<Integer> implements View.OnClic
     }
 
     @Override
-    protected void onBindView(ItemViewHolder holder, @EmptyManager.EmptyStatus Integer data) {
-        visibility(holder, getDefaultViewId(), false);
-        visibility(holder, getLoadingViewId(), false);
-        visibility(holder, getNoDataViewId(), false);
-        visibility(holder, getLoadFailViewId(), false);
-        visibility(holder, getLoadFailNetWorkViewId(), false);
+    protected void onBindView(ItemViewHolder holder, @EmptyStatus.Status Integer data) {
         switch (data) {
-            case EmptyManager.STATUS_DEFAULT:
+            case EmptyStatus.STATUS_DEFAULT:
                 visibility(holder, getDefaultViewId(), true);
+                visibility(holder, getLoadingViewId(), false);
+                visibility(holder, getNoDataViewId(), false);
+                visibility(holder, getLoadFailViewId(), false);
+                visibility(holder, getLoadFailNetWorkViewId(), false);
                 break;
-            case EmptyManager.STATUS_LOADING:
+            case EmptyStatus.STATUS_LOADING:
+                visibility(holder, getDefaultViewId(), false);
                 visibility(holder, getLoadingViewId(), true);
+                visibility(holder, getNoDataViewId(), false);
+                visibility(holder, getLoadFailViewId(), false);
+                visibility(holder, getLoadFailNetWorkViewId(), false);
                 break;
-            case EmptyManager.STATUS_NO_DATA:
+            case EmptyStatus.STATUS_NO_DATA:
+                visibility(holder, getDefaultViewId(), false);
+                visibility(holder, getLoadingViewId(), false);
                 visibility(holder, getNoDataViewId(), true);
+                visibility(holder, getLoadFailViewId(), false);
+                visibility(holder, getLoadFailNetWorkViewId(), false);
                 break;
-            case EmptyManager.STATUS_FAIL:
+            case EmptyStatus.STATUS_FAIL:
+                visibility(holder, getDefaultViewId(), false);
+                visibility(holder, getLoadingViewId(), false);
+                visibility(holder, getNoDataViewId(), false);
                 visibility(holder, getLoadFailViewId(), true);
+                visibility(holder, getLoadFailNetWorkViewId(), false);
                 break;
-            case EmptyManager.STATUS_FAIL_NETWORK:
+            case EmptyStatus.STATUS_FAIL_NETWORK:
+                visibility(holder, getDefaultViewId(), false);
+                visibility(holder, getLoadingViewId(), false);
+                visibility(holder, getNoDataViewId(), false);
+                visibility(holder, getLoadFailViewId(), false);
                 visibility(holder, getLoadFailNetWorkViewId(), true);
                 break;
         }
@@ -63,7 +79,7 @@ public abstract class EmptyView extends ItemView<Integer> implements View.OnClic
     public void onClick(View v) {
         final EmptyManager.OnEmptyRetryClickListener listener = mQuickAdapter.emptyManager().getOnEmptyRetryClickListener();
         if (listener != null) {
-            setData(EmptyManager.STATUS_LOADING);
+            setData(EmptyStatus.STATUS_LOADING);
             listener.onEmptyRetryClick();
         }
     }

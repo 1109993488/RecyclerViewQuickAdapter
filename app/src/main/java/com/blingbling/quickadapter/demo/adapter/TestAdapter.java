@@ -5,6 +5,7 @@ import android.graphics.Color;
 import com.blingbling.quickadapter.BaseQuickAdapter;
 import com.blingbling.quickadapter.demo.R;
 import com.blingbling.quickadapter.manager.AnimationManager;
+import com.blingbling.quickadapter.manager.status.AnimationType;
 import com.blingbling.quickadapter.view.BaseViewHolder;
 import com.blingbling.quickadapter.view.ItemView;
 import com.blingbling.quickadapter.view.ItemViewHolder;
@@ -14,7 +15,7 @@ public class TestAdapter extends BaseQuickAdapter<String> {
 
     public TestAdapter() {
         emptyManager().openEmptyView(true);
-        animationManager().setFirstOnly(false).openAnimation(AnimationManager.ANIMATION_SCALE);
+        animationManager().setFirstOnly(false).openAnimation(AnimationType.ANIMATION_SCALE);
         addItemView(android.R.layout.simple_list_item_1);
         headerManager().addHeaderView(new ItemView() {
             @Override

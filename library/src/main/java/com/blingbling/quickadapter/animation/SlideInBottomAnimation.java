@@ -8,10 +8,10 @@ import android.view.View;
  * Created by BlingBling on 2016/12/15.
  */
 
-public class SlideLeftAnimation implements BaseAnimation {
+public class SlideInBottomAnimation implements BaseAnimation {
 
     @Override
     public Animator getAnimators(View view) {
-        return ObjectAnimator.ofFloat(view, "translationX", -view.getRootView().getWidth(), 0);
+        return ObjectAnimator.ofFloat(view, "translationY", view.getMeasuredHeight(), 0);
     }
 }

@@ -1,31 +1,17 @@
 package com.blingbling.quickadapter.manager;
 
-import android.support.annotation.IntDef;
-
 import com.blingbling.quickadapter.BaseQuickAdapter;
+import com.blingbling.quickadapter.manager.status.EmptyStatus;
 import com.blingbling.quickadapter.view.DefaultEmptyView;
 import com.blingbling.quickadapter.view.EmptyView;
 import com.blingbling.quickadapter.view.ItemView;
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 
 /**
  * Created by BlingBling on 2016/12/14.
  */
 
 public class EmptyManager extends BaseManager {
-    public static final int STATUS_EMPTY = 1;
-    public static final int STATUS_DEFAULT = 2;
-    public static final int STATUS_LOADING = 3;
-    public static final int STATUS_NO_DATA = 4;
-    public static final int STATUS_FAIL = 5;
-    public static final int STATUS_FAIL_NETWORK = 6;
 
-    @IntDef({STATUS_EMPTY, STATUS_DEFAULT, STATUS_LOADING, STATUS_NO_DATA, STATUS_FAIL, STATUS_FAIL_NETWORK})
-    @Retention(RetentionPolicy.SOURCE)
-    public @interface EmptyStatus {
-    }
 
     private ItemView mItemView = new DefaultEmptyView();
 
@@ -80,7 +66,7 @@ public class EmptyManager extends BaseManager {
         return mItemView;
     }
 
-    public void setEmptyStatus(@EmptyStatus int status) {
+    public void setEmptyStatus(@EmptyStatus.Status int status) {
         if (mItemView instanceof EmptyView) {
             mItemView.setData(status);
         } else {

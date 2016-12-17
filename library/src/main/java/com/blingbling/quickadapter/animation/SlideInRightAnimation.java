@@ -8,7 +8,7 @@ import android.view.View;
  * Created by BlingBling on 2016/12/15.
  */
 
-public class SlideRightAnimation implements BaseAnimation {
+public class SlideInRightAnimation implements BaseAnimation {
 
     @Override
     public Animator getAnimators(View view) {
