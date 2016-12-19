@@ -12,12 +12,12 @@ import com.blingbling.quickadapter.view.ItemView;
 
 public class EmptyManager extends BaseManager {
 
-
-    private ItemView mItemView = new DefaultEmptyView();
+    private EmptyView mEmptyView = new DefaultEmptyView();
 
     private boolean mOpenEmpty = false;
     private boolean mHeaderAndEmptyEnable = false;
     private boolean mFooterAndEmptyEnable = false;
+    private OnEmptyRetryClickListener mOnEmptyRetryClickListener;
 
     public EmptyManager(BaseQuickAdapter quickAdapter) {
         super(quickAdapter);
@@ -25,81 +25,63 @@ public class EmptyManager extends BaseManager {
 
     @Override
     public int getItemViewCount() {
-        if (!mOpenEmpty) {
+        if (mOpenEmpty) {
+            return 1;
+        } else {
             return 0;
         }
-        if (mQuickAdapter.getDataViewCount() != 0) {
-            return 0;
-        }
-        return 1;
     }
 
     @Override
     public int getItemViewType(int position) {
-        return mItemView.getViewType();
+        return mEmptyView.getViewType();
     }
 
     @Override
     public ItemView getItemView(int viewType) {
-        if (viewType == mItemView.getViewType()) {
-            return mItemView;
+        if (viewType == mEmptyView.getViewType()) {
+            return mEmptyView;
         } else {
             return null;
         }
     }
 
-    public void setEmptyView(ItemView itemView) {
-        if (itemView == null) {
-            throw new NullPointerException();
+    public void resetEmpty() {
+        if (mEmptyView instanceof EmptyView) {
+            if (mQuickAdapter.getDataViewCount() == 0) {
+                mEmptyView.setData(EmptyStatus.STATUS_NO_DATA);
+            } else {
+                mEmptyView.setData(EmptyStatus.STATUS_EMPTY);
+            }
         }
-        mItemView = itemView;
     }
 
-    public void setEmptyView(EmptyView emptyView) {
+    //user method
+
+    public EmptyManager setEmptyView(EmptyView emptyView) {
         if (emptyView == null) {
             throw new NullPointerException();
         }
-        mItemView = emptyView;
+        mEmptyView = emptyView;
+        return this;
     }
 
-    public ItemView getItemView() {
-        return mItemView;
+//    public EmptyManager setCustomEmptyView(ItemView itemView) {
+//        if (itemView == null) {
+//            throw new NullPointerException();
+//        }
+//        mEmptyView = itemView;
+//        return this;
+//    }
+
+    public EmptyManager setHeaderAndEmpty(boolean isHeadAndEmpty) {
+        return setHeaderFooterAndEmpty(isHeadAndEmpty, false);
     }
 
-    public void setEmptyStatus(@EmptyStatus.Status int status) {
-        if (mItemView instanceof EmptyView) {
-            mItemView.setData(status);
-        } else {
-            throw new RuntimeException("If you setEmptyView(ItemView),you should getItemView().setData(Object).");
-        }
-    }
-
-    public void openEmptyView(boolean open) {
-        final int oldCount = getItemViewCount();
-        mOpenEmpty = open;
-        final int newCount = getItemViewCount();
-        if (oldCount == 0 && newCount == 1) {
-            mQuickAdapter.notifyItemInserted(getHeaderCount());
-        } else if (oldCount == 1 && newCount == 0) {
-            mQuickAdapter.notifyItemRemoved(getHeaderCount());
-        }
-    }
-
-    private int getHeaderCount() {
-        if (mHeaderAndEmptyEnable) {
-            return mQuickAdapter.getHeaderViewCount();
-        } else {
-            return 0;
-        }
-    }
-
-    public void setHeaderAndEmpty(boolean isHeadAndEmpty) {
-        setHeaderFooterEmpty(isHeadAndEmpty, false);
-    }
-
-    public void setHeaderFooterEmpty(boolean isHeadAndEmpty, boolean isFootAndEmpty) {
+    public EmptyManager setHeaderFooterAndEmpty(boolean isHeadAndEmpty, boolean isFootAndEmpty) {
         mHeaderAndEmptyEnable = isHeadAndEmpty;
         mFooterAndEmptyEnable = isFootAndEmpty;
+        return this;
     }
 
     public boolean isHeaderAndEmptyEnable() {
@@ -110,10 +92,39 @@ public class EmptyManager extends BaseManager {
         return mFooterAndEmptyEnable;
     }
 
-    private OnEmptyRetryClickListener mOnEmptyRetryClickListener;
+    public void openEmptyView(boolean open) {
+        mOpenEmpty = open;
+    }
 
-    public void setOnEmptyRetryClickListener(OnEmptyRetryClickListener listener) {
+    public void emptyLoading() {
+        setEmptyStatus(EmptyStatus.STATUS_LOADING);
+    }
+
+    public void emptyFail() {
+        setEmptyStatus(EmptyStatus.STATUS_FAIL);
+    }
+
+    public void emptyFailNetWork() {
+        setEmptyStatus(EmptyStatus.STATUS_FAIL_NETWORK);
+    }
+
+    private void setEmptyStatus(@EmptyStatus.Status int status) {
+        if (mQuickAdapter.getDataViewCount() == 0) {
+            mEmptyView.setData(status);
+        }
+    }
+
+//    public void setCustomEmptyStatus(Object status) {
+//        if (mEmptyView instanceof EmptyView) {
+//            throw new RuntimeException("You should call emptyLoading().");
+//        } else {
+//            mEmptyView.setData(status);
+//        }
+//    }
+
+    public EmptyManager setOnEmptyRetryClickListener(OnEmptyRetryClickListener listener) {
         mOnEmptyRetryClickListener = listener;
+        return this;
     }
 
     public OnEmptyRetryClickListener getOnEmptyRetryClickListener() {

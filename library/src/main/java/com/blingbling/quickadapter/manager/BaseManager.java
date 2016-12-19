@@ -5,8 +5,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.blingbling.quickadapter.BaseQuickAdapter;
-import com.blingbling.quickadapter.view.ItemView;
 import com.blingbling.quickadapter.view.BaseViewHolder;
+import com.blingbling.quickadapter.view.ItemView;
 
 /**
  * Created by BlingBling on 2016/11/21.

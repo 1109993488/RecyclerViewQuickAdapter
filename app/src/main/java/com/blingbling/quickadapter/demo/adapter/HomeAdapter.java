@@ -6,7 +6,6 @@ import android.support.v7.widget.CardView;
 import com.blingbling.quickadapter.BaseQuickAdapter;
 import com.blingbling.quickadapter.demo.R;
 import com.blingbling.quickadapter.demo.entity.HomeItem;
-import com.blingbling.quickadapter.manager.AnimationManager;
 import com.blingbling.quickadapter.manager.status.AnimationType;
 import com.blingbling.quickadapter.view.BaseViewHolder;
 
@@ -18,7 +17,7 @@ public class HomeAdapter extends BaseQuickAdapter<HomeItem> {
 
     public HomeAdapter() {
         addItemView(R.layout.item_home);
-        animationManager().setFirstOnly(false).openAnimation(AnimationType.ANIMATION_ALPHA);
+        animationManager().setFirstOnly(false).openAnimation(AnimationType.ANIMATION_ALPHA_IN);
     }
 
     @Override

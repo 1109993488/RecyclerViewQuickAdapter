@@ -14,7 +14,6 @@ import com.blingbling.quickadapter.listener.OnItemClickListener;
 import com.blingbling.quickadapter.listener.OnItemLongClickListener;
 import com.blingbling.quickadapter.listener.SimpleOnItemTouchListener;
 import com.blingbling.quickadapter.manager.LoadMoreManager;
-import com.blingbling.quickadapter.manager.status.EmptyStatus;
 import com.blingbling.quickadapter.view.BaseViewHolder;
 
 import java.util.ArrayList;
@@ -46,24 +45,24 @@ public class TestActivity extends BaseActivity
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(BaseViewHolder holder, View view, int position) {
-                Log.e("TAG", "adapter-onItemClick------------->"+position);
+                Log.e("TAG", "adapter-onItemClick------------->" + position);
             }
         });
         adapter.setOnItemLongClickListener(new OnItemLongClickListener() {
             @Override
             public void onItemLongClick(BaseViewHolder holder, View view, int position) {
-                Log.e("TAG", "adapter-onItemLongClick------------->"+position);
+                Log.e("TAG", "adapter-onItemLongClick------------->" + position);
             }
         });
         mRecyclerView.addOnItemTouchListener(new SimpleOnItemTouchListener(new OnItemClickListener() {
             @Override
             public void onItemClick(BaseViewHolder holder, View view, int position) {
-                Log.e("TAG", "touch-onItemClick------------->"+position);
+                Log.e("TAG", "touch-onItemClick------------->" + position);
             }
         }, new OnItemLongClickListener() {
             @Override
             public void onItemLongClick(BaseViewHolder holder, View view, int position) {
-                Log.e("TAG", "touch-onItemLongClick------------->"+position);
+                Log.e("TAG", "touch-onItemLongClick------------->" + position);
             }
         }));
     }
@@ -94,7 +93,7 @@ public class TestActivity extends BaseActivity
 
     @Override
     public void onRefresh() {
-        adapter.emptyManager().setEmptyStatus(EmptyStatus.STATUS_LOADING);
+        adapter.emptyManager().emptyLoading();
         adapter.loadMoreManager().setEnableLoadMore(false);
         new Handler().postDelayed(new Runnable() {
             @Override

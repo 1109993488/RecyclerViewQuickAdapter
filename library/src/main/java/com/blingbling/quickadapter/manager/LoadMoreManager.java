@@ -34,9 +34,6 @@ public class LoadMoreManager extends BaseManager {
         if (!mEnableLoadMore) {
             return 0;
         }
-        if (mQuickAdapter.getDataViewCount() == 0) {
-            return 0;
-        }
         if (mLoadMoreEnd && (mLoadMoreView.getLayoutId() == 0 || mLoadMoreEndGone)) {
             return 0;
         }
@@ -57,6 +54,25 @@ public class LoadMoreManager extends BaseManager {
         }
     }
 
+    public void resetLoadMoreEnd() {
+        this.mLoadMoreEnd = false;
+    }
+
+    public void autoLoadMore(int position) {
+        if (position < mQuickAdapter.getItemCount() - mAutoLoadMoreSize) {
+            return;
+        }
+        if (mLoadMoreView.getData() != LoadMoreStatus.STATUS_DEFAULT) {
+            return;
+        }
+        mLoadMoreView.setData(LoadMoreStatus.STATUS_LOADING);
+        if (mOnLoadMoreListener != null) {
+            mOnLoadMoreListener.onLoadMoreRequested();
+        }
+    }
+
+    //user method
+
     public void setLoadMoreView(LoadMoreView loadMoreView) {
         if (loadMoreView == null) {
             throw new NullPointerException();
@@ -68,6 +84,12 @@ public class LoadMoreManager extends BaseManager {
         return mLoadMoreView;
     }
 
+    public void setAutoLoadMoreSize(int autoLoadMoreSize) {
+        if (autoLoadMoreSize >= 1) {
+            mAutoLoadMoreSize = autoLoadMoreSize;
+        }
+    }
+
     public void setOnLoadMoreListener(OnLoadMoreListener listener) {
         mOnLoadMoreListener = listener;
     }
@@ -76,19 +98,14 @@ public class LoadMoreManager extends BaseManager {
         return mOnLoadMoreListener;
     }
 
-    public void setLoadMoreEnd(boolean loadMoreEnd) {
-        this.mLoadMoreEnd = loadMoreEnd;
-        mLoadMoreView.setData(LoadMoreStatus.STATUS_DEFAULT);
-    }
-
     public boolean isEnableLoadMore() {
         return mEnableLoadMore;
     }
 
     public void setEnableLoadMore(boolean enableLoadMore) {
-        int oldLoadMoreCount = getItemViewCount();
+        int oldLoadMoreCount = mQuickAdapter.getLoadMoreViewCount();
         mEnableLoadMore = enableLoadMore;
-        int newLoadMoreCount = getItemViewCount();
+        int newLoadMoreCount = mQuickAdapter.getLoadMoreViewCount();
         if (oldLoadMoreCount == 1 && newLoadMoreCount == 0) {
             mQuickAdapter.notifyItemRemoved(mQuickAdapter.getHeaderViewCount() + mQuickAdapter.getDataViewCount() + mQuickAdapter.getFooterViewCount());
         } else if (oldLoadMoreCount == 0 && newLoadMoreCount == 1) {
@@ -96,12 +113,12 @@ public class LoadMoreManager extends BaseManager {
         }
     }
 
-    public void loadMoreFail() {
-        mLoadMoreView.setData(LoadMoreStatus.STATUS_FAIL);
-    }
-
     public void loadMoreComplete() {
         mLoadMoreView.setData(LoadMoreStatus.STATUS_DEFAULT);
+    }
+
+    public void loadMoreFail() {
+        mLoadMoreView.setData(LoadMoreStatus.STATUS_FAIL);
     }
 
     public void loadMoreEnd() {
@@ -109,35 +126,13 @@ public class LoadMoreManager extends BaseManager {
     }
 
     public void loadMoreEnd(boolean gone) {
-        final int oldCount = getItemViewCount();
+        final int oldCount = mQuickAdapter.getLoadMoreViewCount();
         mLoadMoreEnd = true;
         mLoadMoreEndGone = gone;
         mLoadMoreView.setData(LoadMoreStatus.STATUS_END);
-        final int newCount = getItemViewCount();
+        final int newCount = mQuickAdapter.getLoadMoreViewCount();
         if (oldCount == 1 && newCount == 0) {
             mQuickAdapter.notifyItemRemoved(mQuickAdapter.getHeaderViewCount() + mQuickAdapter.getDataViewCount() + mQuickAdapter.getFooterViewCount());
-        }
-    }
-
-    public void setAutoLoadMoreSize(int autoLoadMoreSize) {
-        if (autoLoadMoreSize >= 1) {
-            mAutoLoadMoreSize = autoLoadMoreSize;
-        }
-    }
-
-    public void autoLoadMore(int position) {
-        if (getItemViewCount() == 0) {
-            return;
-        }
-        if (position < mQuickAdapter.getItemCount() - mAutoLoadMoreSize) {
-            return;
-        }
-        if (mLoadMoreView.getData() != LoadMoreStatus.STATUS_DEFAULT) {
-            return;
-        }
-        mLoadMoreView.setData(LoadMoreStatus.STATUS_LOADING);
-        if (mOnLoadMoreListener != null) {
-            mOnLoadMoreListener.onLoadMoreRequested();
         }
     }
 

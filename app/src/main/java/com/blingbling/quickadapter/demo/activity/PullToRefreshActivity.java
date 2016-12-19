@@ -53,7 +53,7 @@ public class PullToRefreshActivity extends BaseActivity implements SwipeRefreshL
 
     @Override
     public void onRefresh() {
-        if (mQuickAdapter.getData().size() == 0) {
+        if (mQuickAdapter.getDataViewCount() == 0) {
             showProgress();
         }
         mQuickAdapter.loadMoreManager().setEnableLoadMore(false);

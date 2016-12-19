@@ -23,10 +23,10 @@ public class AnimationManager {
     private BaseQuickAdapter mQuickAdapter;
 
     private BaseAnimation mAnimation;
-    private boolean mFirstOnly = true;
     private int mLastPosition = -1;
     private int mAnimationDuration = 300;
     private Interpolator mAnimationInterpolator = new LinearInterpolator();
+    private boolean mFirstOnly = true;
 
     public AnimationManager(BaseQuickAdapter quickAdapter) {
         mQuickAdapter = quickAdapter;
@@ -50,35 +50,35 @@ public class AnimationManager {
         return this;
     }
 
+    public AnimationManager setInterpolator(Interpolator interpolator) {
+        mAnimationInterpolator = interpolator;
+        return this;
+    }
+
     public AnimationManager setFirstOnly(boolean firstOnly) {
         mFirstOnly = firstOnly;
         return this;
     }
 
-    public AnimationManager setDuration(Interpolator interpolator) {
-        mAnimationInterpolator = interpolator;
-        return this;
-    }
-
     public void openAnimation() {
-        openAnimation(AnimationType.ANIMATION_ALPHA);
+        openAnimation(AnimationType.ANIMATION_ALPHA_IN);
     }
 
     public void openAnimation(@AnimationType.Type int animationType) {
         switch (animationType) {
-            case AnimationType.ANIMATION_ALPHA:
+            case AnimationType.ANIMATION_ALPHA_IN:
                 openAnimation(new AlphaInAnimation());
                 break;
-            case AnimationType.ANIMATION_SCALE:
+            case AnimationType.ANIMATION_SCALE_IN:
                 openAnimation(new ScaleInAnimation());
                 break;
-            case AnimationType.ANIMATION_SLIDE_BOTTOM:
+            case AnimationType.ANIMATION_SLIDE_IN_BOTTOM:
                 openAnimation(new SlideInBottomAnimation());
                 break;
-            case AnimationType.ANIMATION_SLIDE_LEFT:
+            case AnimationType.ANIMATION_SLIDE_IN_LEFT:
                 openAnimation(new SlideInLeftAnimation());
                 break;
-            case AnimationType.ANIMATION_SLIDE_RIGHT:
+            case AnimationType.ANIMATION_SLIDE_IN_RIGHT:
                 openAnimation(new SlideInRightAnimation());
                 break;
         }

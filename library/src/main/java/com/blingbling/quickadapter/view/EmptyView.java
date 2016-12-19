@@ -31,6 +31,13 @@ public abstract class EmptyView extends ItemView<Integer> implements View.OnClic
     @Override
     protected void onBindView(ItemViewHolder holder, @EmptyStatus.Status Integer data) {
         switch (data) {
+            case EmptyStatus.STATUS_EMPTY:
+                visibility(holder, getDefaultViewId(), false);
+                visibility(holder, getLoadingViewId(), false);
+                visibility(holder, getNoDataViewId(), false);
+                visibility(holder, getLoadFailViewId(), false);
+                visibility(holder, getLoadFailNetWorkViewId(), false);
+                break;
             case EmptyStatus.STATUS_DEFAULT:
                 visibility(holder, getDefaultViewId(), true);
                 visibility(holder, getLoadingViewId(), false);

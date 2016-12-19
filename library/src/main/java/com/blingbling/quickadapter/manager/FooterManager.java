@@ -32,7 +32,7 @@ public class FooterManager extends BaseManager {
         return mViews.get(viewType);
     }
 
-    public void addFooterView(ItemView view) {
+    public FooterManager addFooterView(ItemView view) {
         int index = getItemViewCount();
         final int viewType = view.getLayoutId();
         if (getItemView(viewType) == null) {
@@ -52,9 +52,10 @@ public class FooterManager extends BaseManager {
                 mQuickAdapter.notifyItemInserted(index);
             }
         }
+        return this;
     }
 
-    public void removeFooterView(ItemView view) {
+    public FooterManager removeFooterView(ItemView view) {
         int index = mViews.indexOfKey(view.getViewType());
         if (index > 0) {
             mViews.removeAt(index);
@@ -71,9 +72,10 @@ public class FooterManager extends BaseManager {
                 }
             }
         }
+        return this;
     }
 
-    public void removeAllFooterView() {
+    public FooterManager removeAllFooterView() {
         final int size = getItemViewCount();
         if (size > 0) {
             mViews.clear();
@@ -91,5 +93,6 @@ public class FooterManager extends BaseManager {
                 }
             }
         }
+        return this;
     }
 }

@@ -38,6 +38,9 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<BaseViewH
 
     private SparseArray<Integer> mLayoutIds = new SparseArray<>(1);
 
+    private boolean mOpenEmpty = true;
+    private boolean mOpenLoadMore = false;
+
     private HeaderManager mHeaderManager;
     private FooterManager mFooterManager;
     private LoadMoreManager mLoadMoreManager;
@@ -60,17 +63,24 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<BaseViewH
 
     public void setNewData(List<T> data) {
         mData = data;
-        if (mLoadMoreManager != null) {
-            mLoadMoreManager.setLoadMoreEnd(false);
-        }
+        openEmptyAndLoadMore();
         if (mEmptyManager != null) {
-            if (getDataViewCount() == 0) {
-                mEmptyManager.setEmptyStatus(EmptyStatus.STATUS_NO_DATA);
-            } else {
-                mEmptyManager.setEmptyStatus(EmptyStatus.STATUS_EMPTY);
-            }
+            mEmptyManager.resetEmpty();
+        }
+        if (mLoadMoreManager != null) {
+            mLoadMoreManager.resetLoadMoreEnd();
         }
         notifyDataSetChanged();
+    }
+
+    private void openEmptyAndLoadMore() {
+        if (getDataViewCount() == 0) {
+            mOpenEmpty = true;
+            mOpenLoadMore = false;
+        } else {
+            mOpenEmpty = false;
+            mOpenLoadMore = true;
+        }
     }
 
     private void checkDatas() {
@@ -131,7 +141,11 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<BaseViewH
         if (mLoadMoreManager == null) {
             return 0;
         } else {
-            return mLoadMoreManager.getItemViewCount();
+            if (mOpenLoadMore) {
+                return mLoadMoreManager.getItemViewCount();
+            } else {
+                return 0;
+            }
         }
     }
 
@@ -139,7 +153,11 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<BaseViewH
         if (mEmptyManager == null) {
             return 0;
         } else {
-            return mEmptyManager.getItemViewCount();
+            if (mOpenEmpty) {
+                return mEmptyManager.getItemViewCount();
+            } else {
+                return 0;
+            }
         }
     }
 
@@ -185,7 +203,9 @@ public abstract class BaseQuickAdapter<T> extends RecyclerView.Adapter<BaseViewH
         } else {
             //auto load more
             if (mLoadMoreManager != null) {
-                mLoadMoreManager.autoLoadMore(position);
+                if (getLoadMoreViewCount() != 0) {
+                    mLoadMoreManager.autoLoadMore(position);
+                }
             }
             //header,data,footer,load more
             final int numHeaders = getHeaderViewCount();

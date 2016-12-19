@@ -32,7 +32,7 @@ public class HeaderManager extends BaseManager {
         return mViews.get(viewType);
     }
 
-    public void addHeaderView(ItemView view) {
+    public HeaderManager addHeaderView(ItemView view) {
         final int index = getItemViewCount();
         final int viewType = view.getViewType();
         if (getItemView(viewType) == null) {
@@ -47,9 +47,10 @@ public class HeaderManager extends BaseManager {
                 mQuickAdapter.notifyItemInserted(index);
             }
         }
+        return this;
     }
 
-    public void removeHeaderView(ItemView view) {
+    public HeaderManager removeHeaderView(ItemView view) {
         final int index = mViews.indexOfKey(view.getViewType());
         if (index > 0) {
             mViews.removeAt(index);
@@ -61,9 +62,10 @@ public class HeaderManager extends BaseManager {
                 }
             }
         }
+        return this;
     }
 
-    public void removeAllHeaderView() {
+    public HeaderManager removeAllHeaderView() {
         final int size = getItemViewCount();
         if (size > 0) {
             mViews.clear();
@@ -75,5 +77,6 @@ public class HeaderManager extends BaseManager {
                 }
             }
         }
+        return this;
     }
 }
