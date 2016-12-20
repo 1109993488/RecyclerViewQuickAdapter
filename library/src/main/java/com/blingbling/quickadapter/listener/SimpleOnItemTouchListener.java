@@ -1,5 +1,6 @@
 package com.blingbling.quickadapter.listener;
 
+import android.graphics.Rect;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.GestureDetector;
@@ -96,26 +97,42 @@ public class SimpleOnItemTouchListener implements RecyclerView.OnItemTouchListen
                 if (adapter.getViewType(vh.getItemViewType()) == BaseQuickAdapter.VIEW_TYPE_DATA) {
                     final HashSet<View> set = isLongClick ? vh.getLongClickViews() : vh.getClickViews();
 
+                    View clickView = null;
+
                     for (Iterator<View> it = set.iterator(); it.hasNext(); ) {
                         final View childView = it.next();
-                        if (childView.isEnabled() && inRangeOfView(childView, e)) {
-                            final int position = vh.getLayoutPosition() - adapter.getHeaderViewCount();
-                            if (isLongClick) {
-                                mOnItemLongClickListener.onItemLongClick(vh, childView, position);
-                            } else {
-                                if (childView instanceof TextView) {
-                                    final TextView tv = (TextView) childView;
-                                    if (tv.getLinksClickable()) {
-                                        return;
+                        if (childView.getVisibility() == View.VISIBLE && childView.isEnabled()) {
+                            if (inRangeOfView(childView, e)) {
+
+                                if (clickView == null) {
+                                    clickView = childView;
+                                } else {
+                                    if (checkView1InView2(childView, clickView)) {
+                                        clickView = childView;
                                     }
                                 }
-                                childView.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        mOnItemClickListener.onItemClick(vh, childView, position);
-                                    }
-                                });
                             }
+                        }
+                    }
+
+                    if (clickView != null) {
+                        final int position = vh.getLayoutPosition() - adapter.getHeaderViewCount();
+                        if (isLongClick) {
+                            mOnItemLongClickListener.onItemLongClick(vh, clickView, position);
+                        } else {
+                            if (clickView instanceof TextView) {
+                                final TextView tv = (TextView) clickView;
+                                if (tv.getMovementMethod() != null) {
+                                    return;
+                                }
+                            }
+                            final View itemClickView = clickView;
+                            clickView.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mOnItemClickListener.onItemClick(vh, itemClickView, position);
+                                }
+                            });
                         }
                     }
                 }
@@ -145,6 +162,31 @@ public class SimpleOnItemTouchListener implements RecyclerView.OnItemTouchListen
                 return false;
             }
             return true;
+        }
+
+        /**
+         * view1 in view2
+         *
+         * @param view1
+         * @param view2
+         * @return
+         */
+        public boolean checkView1InView2(View view1, View view2) {
+            int[] location1 = new int[2];
+            int[] location2 = new int[2];
+            view1.getLocationOnScreen(location1);
+            view2.getLocationOnScreen(location2);
+            Rect rect1 = new Rect(location1[0], location1[1], location1[0] + view1.getWidth(), location1[1] + view1.getHeight());
+            Rect rect2 = new Rect(location2[0], location2[1], location2[0] + view2.getWidth(), location2[1] + view2.getHeight());
+
+            if (rect1.left >= rect2.left
+                    && rect1.top >= rect2.top
+                    && rect1.right <= rect2.right
+                    && rect1.bottom <= rect2.bottom) {
+                return true;
+            } else {
+                return false;
+            }
         }
 
     }
