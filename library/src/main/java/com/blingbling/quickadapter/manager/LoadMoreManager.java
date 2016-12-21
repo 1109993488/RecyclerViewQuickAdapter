@@ -13,7 +13,7 @@ import com.blingbling.quickadapter.view.LoadMoreView;
 
 public class LoadMoreManager extends BaseManager {
 
-    private LoadMoreView mLoadMoreView = new DefaultLoadMoreView();
+    private LoadMoreView mLoadMoreView;
 
     private boolean mEnableLoadMore = true;
     private boolean mLoadMoreEnd = false;
@@ -28,7 +28,7 @@ public class LoadMoreManager extends BaseManager {
 
     @Override
     public int getItemViewCount() {
-        if (mOnLoadMoreListener == null) {
+        if (mLoadMoreView == null || mOnLoadMoreListener == null) {
             return 0;
         }
         if (!mEnableLoadMore) {
@@ -56,6 +56,7 @@ public class LoadMoreManager extends BaseManager {
 
     public void resetLoadMoreEnd() {
         this.mLoadMoreEnd = false;
+        mLoadMoreView.setData(LoadMoreStatus.STATUS_DEFAULT);
     }
 
     public void autoLoadMore(int position) {
@@ -73,24 +74,24 @@ public class LoadMoreManager extends BaseManager {
 
     //user method
 
-    public void setLoadMoreView(LoadMoreView loadMoreView) {
-        if (loadMoreView == null) {
-            throw new NullPointerException();
-        }
-        mLoadMoreView = loadMoreView;
-    }
-
-    public LoadMoreView getLoadMoreView() {
-        return mLoadMoreView;
-    }
-
     public void setAutoLoadMoreSize(int autoLoadMoreSize) {
         if (autoLoadMoreSize >= 1) {
             mAutoLoadMoreSize = autoLoadMoreSize;
         }
     }
 
-    public void setOnLoadMoreListener(OnLoadMoreListener listener) {
+    public void openLoadMore(OnLoadMoreListener listener) {
+        openLoadMore(new DefaultLoadMoreView(), listener);
+    }
+
+    public void openLoadMore(LoadMoreView loadMoreView, OnLoadMoreListener listener) {
+        if (loadMoreView == null) {
+            throw new NullPointerException();
+        }
+        if (listener == null) {
+            throw new NullPointerException();
+        }
+        mLoadMoreView = loadMoreView;
         mOnLoadMoreListener = listener;
     }
 
@@ -114,11 +115,11 @@ public class LoadMoreManager extends BaseManager {
     }
 
     public void loadMoreComplete() {
-        mLoadMoreView.setData(LoadMoreStatus.STATUS_DEFAULT);
+        setLoadMoreStatus(LoadMoreStatus.STATUS_DEFAULT);
     }
 
     public void loadMoreFail() {
-        mLoadMoreView.setData(LoadMoreStatus.STATUS_FAIL);
+        setLoadMoreStatus(LoadMoreStatus.STATUS_FAIL);
     }
 
     public void loadMoreEnd() {
@@ -129,11 +130,18 @@ public class LoadMoreManager extends BaseManager {
         final int oldCount = mQuickAdapter.getLoadMoreViewCount();
         mLoadMoreEnd = true;
         mLoadMoreEndGone = gone;
-        mLoadMoreView.setData(LoadMoreStatus.STATUS_END);
+        setLoadMoreStatus(LoadMoreStatus.STATUS_END);
         final int newCount = mQuickAdapter.getLoadMoreViewCount();
         if (oldCount == 1 && newCount == 0) {
             mQuickAdapter.notifyItemRemoved(mQuickAdapter.getHeaderViewCount() + mQuickAdapter.getDataViewCount() + mQuickAdapter.getFooterViewCount());
         }
+    }
+
+    private void setLoadMoreStatus(@LoadMoreStatus.Status int status) {
+        if (mLoadMoreView == null) {
+            return;
+        }
+        mLoadMoreView.setData(status);
     }
 
     public interface OnLoadMoreListener {

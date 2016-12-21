@@ -12,9 +12,8 @@ import com.blingbling.quickadapter.view.ItemView;
 
 public class EmptyManager extends BaseManager {
 
-    private EmptyView mEmptyView = new DefaultEmptyView();
+    private EmptyView mEmptyView;
 
-    private boolean mOpenEmpty = false;
     private boolean mHeaderAndEmptyEnable = false;
     private boolean mFooterAndEmptyEnable = false;
     private OnEmptyRetryClickListener mOnEmptyRetryClickListener;
@@ -25,7 +24,7 @@ public class EmptyManager extends BaseManager {
 
     @Override
     public int getItemViewCount() {
-        if (mOpenEmpty) {
+        if (mEmptyView != null) {
             return 1;
         } else {
             return 0;
@@ -58,22 +57,6 @@ public class EmptyManager extends BaseManager {
 
     //user method
 
-    public EmptyManager setEmptyView(EmptyView emptyView) {
-        if (emptyView == null) {
-            throw new NullPointerException();
-        }
-        mEmptyView = emptyView;
-        return this;
-    }
-
-//    public EmptyManager setCustomEmptyView(ItemView itemView) {
-//        if (itemView == null) {
-//            throw new NullPointerException();
-//        }
-//        mEmptyView = itemView;
-//        return this;
-//    }
-
     public EmptyManager setHeaderAndEmpty(boolean isHeadAndEmpty) {
         return setHeaderFooterAndEmpty(isHeadAndEmpty, false);
     }
@@ -92,8 +75,15 @@ public class EmptyManager extends BaseManager {
         return mFooterAndEmptyEnable;
     }
 
-    public void openEmptyView(boolean open) {
-        mOpenEmpty = open;
+    public void openEmptyView() {
+        openEmptyView(new DefaultEmptyView());
+    }
+
+    public void openEmptyView(EmptyView emptyView) {
+        if (emptyView == null) {
+            throw new NullPointerException();
+        }
+        mEmptyView = emptyView;
     }
 
     public void emptyLoading() {
@@ -109,18 +99,13 @@ public class EmptyManager extends BaseManager {
     }
 
     private void setEmptyStatus(@EmptyStatus.Status int status) {
+        if (mEmptyView == null) {
+            return;
+        }
         if (mQuickAdapter.getDataViewCount() == 0) {
             mEmptyView.setData(status);
         }
     }
-
-//    public void setCustomEmptyStatus(Object status) {
-//        if (mEmptyView instanceof EmptyView) {
-//            throw new RuntimeException("You should call emptyLoading().");
-//        } else {
-//            mEmptyView.setData(status);
-//        }
-//    }
 
     public EmptyManager setOnEmptyRetryClickListener(OnEmptyRetryClickListener listener) {
         mOnEmptyRetryClickListener = listener;

@@ -13,7 +13,7 @@ import com.blingbling.quickadapter.view.ItemViewHolder;
 public class TestAdapter extends BaseQuickAdapter<String> {
 
     public TestAdapter() {
-        emptyManager().openEmptyView(true);
+        emptyManager().openEmptyView();
         animationManager().setFirstOnly(false).openAnimation(AnimationType.ANIMATION_SCALE_IN);
         addItemView(android.R.layout.simple_list_item_1);
         headerManager().addHeaderView(new ItemView() {

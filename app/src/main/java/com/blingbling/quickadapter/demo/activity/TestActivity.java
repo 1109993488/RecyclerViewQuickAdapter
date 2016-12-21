@@ -77,7 +77,7 @@ public class TestActivity extends BaseActivity
 
     private void initAdapter() {
         adapter = new TestAdapter();
-        adapter.loadMoreManager().setOnLoadMoreListener(this);
+        adapter.loadMoreManager().openLoadMore(this);
 //        adapter.loadMoreViewManager().setAutoLoadMoreSize(2);
         mRecyclerView.setAdapter(adapter);
     }

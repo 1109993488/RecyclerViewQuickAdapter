@@ -46,7 +46,7 @@ public class PullToRefreshActivity extends BaseActivity implements SwipeRefreshL
 
     private void initAdapter() {
         mQuickAdapter = new QuickAdapter();
-        mQuickAdapter.loadMoreManager().setOnLoadMoreListener(this);
+        mQuickAdapter.loadMoreManager().openLoadMore(this);
 
         mRecyclerView.setAdapter(mQuickAdapter);
     }
