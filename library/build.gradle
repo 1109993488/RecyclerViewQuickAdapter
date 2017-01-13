@@ -1,4 +1,14 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.novoda.bintray-release'
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.novoda:bintray-release:0.4.0'
+    }
+}
 
 android {
     compileSdkVersion 25
@@ -22,4 +32,14 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:design:25.1.0'
+}
+
+
+publish {
+    userOrg = '1109993488'
+    groupId = 'com.blingbling'
+    artifactId = 'RecyclerViewQuickAdapter'
+    publishVersion = '1.0.0'
+    desc = 'RecyclerViewAdapter'
+    website = 'https://github.com/1109993488/RecyclerViewQuickAdapter'
 }
