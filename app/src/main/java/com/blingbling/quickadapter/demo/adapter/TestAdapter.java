@@ -5,7 +5,6 @@ import android.graphics.Color;
 import com.blingbling.quickadapter.BaseQuickAdapter;
 import com.blingbling.quickadapter.base.ItemView;
 import com.blingbling.quickadapter.base.status.AnimationType;
-import com.blingbling.quickadapter.base.view.DefaultEmptyView;
 import com.blingbling.quickadapter.base.view.QuickViewHolder;
 
 

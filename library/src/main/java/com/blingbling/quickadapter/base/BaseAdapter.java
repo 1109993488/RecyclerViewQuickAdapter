@@ -138,20 +138,20 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
         loadMoreSetNewData(data, pageSize, false);
     }
 
-    public void loadMoreSetNewData(List<T> data, int pageSize, boolean loadMoreEnd) {
+    public void loadMoreSetNewData(List<T> data, int pageSize, boolean loadMoreEndGone) {
         setNewData(data);
-        autoChangeLoadMoreStatus(data, pageSize, loadMoreEnd);
+        autoChangeLoadMoreStatus(data, pageSize, loadMoreEndGone);
     }
 
     public void loadMoreAddData(List<T> data, int pageSize) {
         loadMoreAddData(data, pageSize, false);
     }
 
-    public void loadMoreAddData(List<T> data, int pageSize, boolean loadMoreEnd) {
+    public void loadMoreAddData(List<T> data, int pageSize, boolean loadMoreEndGone) {
         if (data != null) {
             addData(data);
         }
-        autoChangeLoadMoreStatus(data, pageSize, loadMoreEnd);
+        autoChangeLoadMoreStatus(data, pageSize, loadMoreEndGone);
     }
 
     public void loadMoreFail() {
@@ -160,11 +160,11 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
         }
     }
 
-    private void autoChangeLoadMoreStatus(List<T> data, int pageSize, boolean loadMoreEnd) {
+    private void autoChangeLoadMoreStatus(List<T> data, int pageSize, boolean loadMoreEndGone) {
         if (mLoadMoreManager != null) {
             final int dataSize = data == null ? 0 : data.size();
             if (dataSize < pageSize) {
-                mLoadMoreManager.loadMoreEnd(loadMoreEnd);
+                mLoadMoreManager.loadMoreEnd(loadMoreEndGone);
             } else {
                 mLoadMoreManager.loadMoreComplete();
             }

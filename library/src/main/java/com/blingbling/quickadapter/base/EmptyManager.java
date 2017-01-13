@@ -69,11 +69,7 @@ public class EmptyManager extends BaseManager<FrameLayout> {
         checkBindLayout();
         final int newCount = getItemViewCount();
         if (oldCount == 0 && newCount == 1) {
-            int pos = 0;
-            if (mHeaderAndEmptyEnable) {
-                pos += mQuickAdapter.getHeaderViewCount();
-            }
-            mQuickAdapter.notifyItemInserted(pos);
+            mQuickAdapter.notifyDataSetChanged();
         }
     }
 

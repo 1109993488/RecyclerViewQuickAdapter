@@ -9,8 +9,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.blingbling.quickadapter.base.LoadMoreManager;
-import com.blingbling.quickadapter.base.status.EmptyStatus;
-import com.blingbling.quickadapter.base.view.DefaultEmptyView;
+import com.blingbling.quickadapter.base.view.SimpleView;
 import com.blingbling.quickadapter.demo.R;
 import com.blingbling.quickadapter.demo.adapter.TestAdapter;
 import com.blingbling.quickadapter.listener.OnItemClickListener;
@@ -34,7 +33,6 @@ public class TestActivity extends BaseActivity
     private RecyclerView mRecyclerView;
 
     private TestAdapter adapter;
-    private DefaultEmptyView mEmptyView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +66,6 @@ public class TestActivity extends BaseActivity
     private void initAdapter() {
         adapter = new TestAdapter();
         adapter.loadMoreManager().openLoadMore(this);
-        mEmptyView = new DefaultEmptyView();
-        adapter.emptyManager().setEmptyView(mEmptyView);
 //        adapter.loadMoreViewManager().setAutoLoadMoreSize(2);
         mRecyclerView.setAdapter(adapter);
     }
@@ -86,7 +82,7 @@ public class TestActivity extends BaseActivity
     @Override
     public void onRefresh() {
         if (adapter.getDataViewCount() == 0) {
-            mEmptyView.setData(EmptyStatus.STATUS_LOADING);
+            adapter.emptyManager().setEmptyView(new SimpleView(R.layout.view_empty_loading));
         }
         adapter.loadMoreManager().setEnableLoadMore(false);
         new Handler().postDelayed(new Runnable() {
@@ -95,7 +91,6 @@ public class TestActivity extends BaseActivity
                 isError = true;
                 adapter.setNewData(getData(PAGE_SIZE));
                 currentCount = PAGE_SIZE;
-                mEmptyView.setData(EmptyStatus.STATUS_EMPTY);
 
                 mRefresh.setRefreshing(false);
                 adapter.loadMoreManager().setEnableLoadMore(true);
